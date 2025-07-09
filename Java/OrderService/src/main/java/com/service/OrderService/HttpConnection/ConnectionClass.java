@@ -1,17 +1,21 @@
 package com.service.OrderService.HttpConnection;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.OrderService.model.Product;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 
 @Component
 public class ConnectionClass {
 
-    public void getHttppConnection() {
+    public void getData() {
         HttpURLConnection httpURLConnection = null;
         String uri = "http://localhost:8081/ProductService/product";
         try {
@@ -39,5 +43,34 @@ public class ConnectionClass {
             if (httpURLConnection != null)
                 httpURLConnection.disconnect();
         }
+    }
+
+    public ResponseEntity<String> postData(Product product){
+        String url = "http://localhost:8081/ProductService/product";
+        HttpURLConnection httpURLConnection = null;
+        try{
+            URL obj = new URL(url);
+            httpURLConnection = (HttpURLConnection) obj.openConnection(Proxy.NO_PROXY);
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("Content-Type","application/json");
+            httpURLConnection.setReadTimeout(100);
+            httpURLConnection.setConnectTimeout(500);
+            httpURLConnection.setDoOutput(true);
+
+            try(OutputStream os = httpURLConnection.getOutputStream()){
+                ObjectMapper mapper = new ObjectMapper();
+                String objectString = mapper.writeValueAsString(product);
+                byte[] input = objectString.getBytes("utf-8");
+                os.write(input,0, input.length);
+                System.out.println("______"+ httpURLConnection.getResponseCode());
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            if (httpURLConnection != null)
+                httpURLConnection.disconnect();
+        }
+        return new ResponseEntity<>("Product added successfully", HttpStatus.CREATED);
     }
 }

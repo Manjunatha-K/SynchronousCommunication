@@ -3,7 +3,6 @@ package com.service.OrderService.Controllers;
 import com.service.OrderService.HttpConnection.ConnectionClass;
 import com.service.OrderService.Repo.OrderRepo;
 import com.service.OrderService.model.Order;
-import com.service.OrderService.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class OrderController {
 
     @GetMapping("/order")
     public ResponseEntity<List<Order>> getAllOrders() {
-        connectionClass.getData();
+        connectionClass.getHttppConnection();
         return new ResponseEntity<>(orderRepo.getAllOrders(), HttpStatus.OK);
     }
 
@@ -42,10 +41,6 @@ public class OrderController {
     @DeleteMapping("/order")
     public ResponseEntity<String> deleteOrder(@RequestParam("id") Integer id) {
         return new ResponseEntity<>(orderRepo.deleteOrder(id), HttpStatus.CREATED);
-    }
-    @PostMapping("/product")
-    public ResponseEntity<String> addProduct(@RequestBody Product product) {
-       return connectionClass.postData(product);
     }
 
 }
