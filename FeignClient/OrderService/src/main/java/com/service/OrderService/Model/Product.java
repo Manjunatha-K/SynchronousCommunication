@@ -7,15 +7,15 @@ public class Product {
 
     private int id;
     private String name;
-    private double amount;
+    private String category;
 
     public Product(){
 
     }
-    public Product(int id, String name,double amount){
+    public Product(int id, String name,String category){
         this.id = id;
         this.name = name;
-        this.amount = amount;
+        this.category = category;
     }
 
     public int getId() {
@@ -34,11 +34,20 @@ public class Product {
         this.name = name;
     }
 
-    public double getAmount() {
-        return amount;
+    public String getAmount() {
+        return category;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setAmount(String amount) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                '}';
     }
 }
